@@ -1,0 +1,10 @@
+name: "Fried Plantain (Dodo)"
+category: "sides"
+price: 5
+description: "Sweet ripe plantains fried golden."
+dietaryTags:
+  - vegetarian
+  - vegan
+featured: false
+available: true
+order: 1

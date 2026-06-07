@@ -1,0 +1,5 @@
+name: "Main Dishes"
+type: "food"
+description: "Hearty plates from across the continent"
+order: 2
+visible: true

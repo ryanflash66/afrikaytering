@@ -1,0 +1,5 @@
+name: "Sides"
+type: "food"
+description: ""
+order: 3
+visible: true

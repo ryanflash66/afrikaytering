@@ -1,0 +1,21 @@
+---
+interface Props {
+  tag: string
+}
+const { tag } = Astro.props
+
+const MAP: Record<string, { label: string; icon: string }> = {
+  vegetarian: { label: 'Vegetarian', icon: '🥬' },
+  vegan: { label: 'Vegan', icon: '🌱' },
+  halal: { label: 'Halal', icon: '☪️' },
+  'gluten-free': { label: 'Gluten-free', icon: '🌾' },
+  'dairy-free': { label: 'Dairy-free', icon: '🥛' },
+  'contains-nuts': { label: 'Contains nuts', icon: '🥜' },
+  spicy: { label: 'Spicy', icon: '🌶️' },
+}
+const info = MAP[tag] ?? { label: tag, icon: '•' }
+---
+
+<span class={`badge badge--${tag}`}>
+  <span aria-hidden="true">{info.icon}</span> {info.label}
+</span>

@@ -1,0 +1,7 @@
+name: "Nigerian Meat Pie"
+category: "starters"
+price: 6
+description: "Flaky pastry filled with seasoned minced beef, potato and carrot."
+featured: false
+available: true
+order: 2

@@ -1,0 +1,67 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  restaurant: Record<string, any> | null
+}
+const { restaurant } = Astro.props
+const r = restaurant ?? {}
+
+const title = r.name ? `${r.name} — Menu` : 'Menu'
+const description = r.tagline ?? 'Browse our menu'
+const waNumber = String(r.whatsapp ?? '').replace(/[^0-9]/g, '')
+const telNumber = String(r.phone ?? '').replace(/\s+/g, '')
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#b5471f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        {r.logo && (
+          <img class="brand-logo" src={r.logo} alt={`${r.name ?? 'Restaurant'} logo`} width="50" height="50" />
+        )}
+        <div>
+          <h1 class="brand-name">{r.name ?? 'Our Menu'}</h1>
+          {r.tagline && <p class="brand-tagline">{r.tagline}</p>}
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        {(telNumber || waNumber || r.mapsUrl) && (
+          <div class="contact-actions">
+            {telNumber && <a class="contact-btn" href={`tel:${telNumber}`}>📞 Call</a>}
+            {waNumber && <a class="contact-btn" href={`https://wa.me/${waNumber}`}>💬 WhatsApp</a>}
+            {r.mapsUrl && <a class="contact-btn" href={r.mapsUrl}>📍 Directions</a>}
+          </div>
+        )}
+        {r.hours && <p class="footer-hours">{r.hours}</p>}
+        {r.address && <p class="footer-address">{r.address}</p>}
+        {(r.instagram || r.facebook) && (
+          <div class="social">
+            {r.instagram && <a href={r.instagram}>Instagram</a>}
+            {r.facebook && <a href={r.facebook}>Facebook</a>}
+          </div>
+        )}
+        <p class="footer-credit">Digital menu · scan, browse, enjoy</p>
+      </div>
+    </footer>
+  </body>
+</html>

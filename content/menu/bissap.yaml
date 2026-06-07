@@ -1,0 +1,10 @@
+name: "Bissap (Hibiscus Juice)"
+category: "drinks"
+price: 4
+description: "Chilled hibiscus infusion with a hint of ginger and mint."
+dietaryTags:
+  - vegetarian
+  - vegan
+featured: true
+available: true
+order: 1

@@ -1,0 +1,230 @@
+:root {
+  --bg: #fbf6ee;
+  --surface: #ffffff;
+  --surface-2: #fff9f0;
+  --ink: #2a211c;
+  --muted: #857469;
+  --line: #ece0d2;
+  --accent: #b5471f;       /* terracotta */
+  --accent-ink: #8a3415;
+  --gold: #d99a2b;
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 6px 18px rgba(60, 30, 10, .06);
+  --maxw: 680px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3 { line-height: 1.2; }
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+.brand-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: #fff;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.brand-name { margin: 0; font-size: 1.45rem; font-weight: 800; letter-spacing: .2px; }
+.brand-tagline { margin: 3px 0 0; font-size: .85rem; opacity: .92; }
+
+/* ---------- Category nav (sticky chips) ---------- */
+.catnav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(251, 246, 238, .94);
+  backdrop-filter: saturate(160%) blur(8px);
+  border-bottom: 1px solid var(--line);
+  margin: 0 -16px;
+}
+.catnav ul {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.catnav ul::-webkit-scrollbar { display: none; }
+.catnav a {
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 7px 14px;
+  border-radius: 999px;
+}
+.catnav a:active { background: var(--surface-2); }
+
+/* ---------- Sections ---------- */
+.section { padding: 22px 0 4px; scroll-margin-top: 64px; }
+.section-title {
+  font-size: 1.18rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-desc { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+.items { display: flex; flex-direction: column; gap: 12px; }
+.divider {
+  margin: 26px 0 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--accent);
+  border-top: 2px solid var(--line);
+  padding-top: 18px;
+}
+
+/* ---------- Item card ---------- */
+.item {
+  display: flex;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+.item-photo {
+  width: 86px;
+  height: 86px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: var(--surface-2);
+}
+.item-photo--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--gold);
+  border: 1px dashed var(--line);
+}
+.item-body { flex: 1; min-width: 0; }
+.item-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  justify-content: space-between;
+}
+.item-name { margin: 0; font-size: 1.03rem; font-weight: 700; }
+.item-price { font-weight: 800; color: var(--accent-ink); white-space: nowrap; }
+.item-desc { margin: 5px 0 0; color: var(--muted); font-size: .9rem; }
+
+.item--featured,
+.section--specials .item {
+  border-color: #eccb86;
+  background: linear-gradient(180deg, #fff9ec, #ffffff);
+}
+.item--unavailable { opacity: .55; }
+.item--unavailable .item-name::after {
+  content: " · Unavailable";
+  color: var(--muted);
+  font-weight: 600;
+  font-size: .8rem;
+}
+
+/* ---------- Dietary badges ---------- */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 9px 0 0;
+  padding: 0;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.badge--spicy { background: #fdecea; border-color: #f6c9c2; color: #b5471f; }
+.badge--vegan,
+.badge--vegetarian { background: #eef6ea; border-color: #cfe6c2; color: #3f7a2e; }
+.badge--halal { background: #eaf2fb; border-color: #c4dbf3; color: #2c5d96; }
+.badge--contains-nuts { background: #fbf1e6; border-color: #f0d9bd; color: #9a6a1e; }
+.badge--gluten-free,
+.badge--dairy-free { background: #f3eefb; border-color: #ddd0f0; color: #6b4b9a; }
+
+/* ---------- Empty state ---------- */
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 48px 16px;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: 30px;
+  background: #2a211c;
+  color: #f3e8dc;
+  padding: 24px 0 40px;
+}
+.contact-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.contact-btn {
+  flex: 1;
+  min-width: 130px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+}
+.footer-hours,
+.footer-address { white-space: pre-line; margin: 6px 0; color: #d8c8b8; font-size: .9rem; }
+.social { display: flex; gap: 16px; margin: 12px 0 0; }
+.social a { color: var(--gold); text-decoration: none; font-weight: 600; }
+.footer-credit { margin-top: 16px; font-size: .78rem; color: #9b8a7b; }
+
+/* ---------- Larger screens ---------- */
+@media (min-width: 560px) {
+  .items { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .section--specials .items { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,5 @@
+name: "Drinks"
+type: "drink"
+description: "Fresh juices and more"
+order: 4
+visible: true

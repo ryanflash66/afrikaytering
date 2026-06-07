@@ -1,0 +1,90 @@
+---
+import { createReader } from '@keystatic/core/reader'
+import keystaticConfig from '../../keystatic.config'
+import Base from '../layouts/Base.astro'
+import MenuItemCard from '../components/MenuItemCard.astro'
+
+const reader = createReader(process.cwd(), keystaticConfig)
+
+const restaurant = await reader.singletons.restaurant.read()
+const categoriesRaw = await reader.collections.categories.all()
+const itemsRaw = await reader.collections.menuItems.all()
+
+const currency = restaurant?.currency ?? 'USD'
+
+const categories = categoriesRaw
+  .map((c) => ({ slug: c.slug, ...c.entry }))
+  .filter((c) => c.visible !== false)
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+const items = itemsRaw
+  .map((i) => ({ slug: i.slug, ...i.entry }))
+  .filter((i) => i.available !== false)
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+const itemsIn = (catSlug: string) => items.filter((i) => i.category === catSlug)
+const featured = items.filter((i) => i.featured)
+
+const foodCategories = categories.filter((c) => c.type === 'food' && itemsIn(c.slug).length > 0)
+const drinkCategories = categories.filter((c) => c.type === 'drink' && itemsIn(c.slug).length > 0)
+const hasMenu = items.length > 0
+---
+
+<Base restaurant={restaurant}>
+  {hasMenu ? (
+    <>
+      <nav class="catnav" aria-label="Menu sections">
+        <ul>
+          {featured.length > 0 && <li><a href="#specials">⭐ Specials</a></li>}
+          {[...foodCategories, ...drinkCategories].map((c) => (
+            <li><a href={`#cat-${c.slug}`}>{c.name}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      {featured.length > 0 && (
+        <section id="specials" class="section section--specials">
+          <h2 class="section-title">⭐ Today's Specials</h2>
+          <div class="items">
+            {featured.map((item) => (
+              <MenuItemCard item={item} currency={currency} featured={true} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {foodCategories.map((c) => (
+        <section id={`cat-${c.slug}`} class="section">
+          <h2 class="section-title">{c.name}</h2>
+          {c.description && <p class="section-desc">{c.description}</p>}
+          <div class="items">
+            {itemsIn(c.slug).map((item) => (
+              <MenuItemCard item={item} currency={currency} />
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {drinkCategories.length > 0 && (
+        <>
+          <p class="divider">Drinks</p>
+          {drinkCategories.map((c) => (
+            <section id={`cat-${c.slug}`} class="section">
+              <h2 class="section-title">{c.name}</h2>
+              {c.description && <p class="section-desc">{c.description}</p>}
+              <div class="items">
+                {itemsIn(c.slug).map((item) => (
+                  <MenuItemCard item={item} currency={currency} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </>
+      )}
+    </>
+  ) : (
+    <div class="empty">
+      <p>Our menu is coming soon. Please check back shortly!</p>
+    </div>
+  )}
+</Base>

@@ -1,0 +1,7 @@
+name: "Palm Wine"
+category: "drinks"
+price: 5
+description: "Naturally sweet, lightly fermented palm sap."
+featured: false
+available: true
+order: 3
