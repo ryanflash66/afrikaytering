@@ -1,9 +1,0 @@
-name: "Bottled Water"
-category: "drinks"
-price: 2
-description: "500ml still water."
-dietaryTags:
-  - vegan
-featured: false
-available: true
-order: 4

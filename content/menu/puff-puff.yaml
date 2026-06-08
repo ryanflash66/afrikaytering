@@ -1,9 +1,0 @@
-name: "Puff Puff"
-category: "starters"
-price: 5
-description: "Soft, golden deep-fried dough balls, lightly sweet."
-dietaryTags:
-  - vegetarian
-featured: false
-available: true
-order: 1

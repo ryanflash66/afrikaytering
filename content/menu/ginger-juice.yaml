@@ -1,9 +1,0 @@
-name: "Ginger Juice"
-category: "drinks"
-price: 4
-description: "House-made spicy-sweet ginger drink."
-dietaryTags:
-  - vegan
-featured: false
-available: true
-order: 2

@@ -1,0 +1,9 @@
+name: "Piña Colada Slushy"
+category: "mocktails"
+description: "Frozen pineapple and coconut — a virgin piña colada."
+price: 15
+priceNote: ""
+dietaryTags: []
+featured: false
+available: true
+order: 1

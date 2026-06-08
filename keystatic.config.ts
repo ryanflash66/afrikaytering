@@ -107,6 +107,10 @@ export default config({
           label: 'Price',
           validation: { isRequired: true, min: 0 },
         }),
+        priceNote: fields.text({
+          label: 'Price note',
+          description: 'Optional qualifier shown next to the price, e.g. "2 for" or "each"',
+        }),
         image: fields.image({
           label: 'Photo',
           directory: 'public/images/menu',

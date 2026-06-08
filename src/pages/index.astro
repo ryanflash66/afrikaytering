@@ -2,6 +2,8 @@
 import { createReader } from '@keystatic/core/reader'
 import keystaticConfig from '../../keystatic.config'
 import Base from '../layouts/Base.astro'
+import CategoryTabs from '../components/CategoryTabs.astro'
+import SectionHeader from '../components/SectionHeader.astro'
 import MenuItemCard from '../components/MenuItemCard.astro'
 
 const reader = createReader(process.cwd(), keystaticConfig)
@@ -28,63 +30,167 @@ const featured = items.filter((i) => i.featured)
 const foodCategories = categories.filter((c) => c.type === 'food' && itemsIn(c.slug).length > 0)
 const drinkCategories = categories.filter((c) => c.type === 'drink' && itemsIn(c.slug).length > 0)
 const hasMenu = items.length > 0
+
+const tabs = [
+  ...(featured.length > 0 ? [{ id: 'specials', label: 'Specials' }] : []),
+  ...foodCategories.map((c) => ({ id: `cat-${c.slug}`, label: c.name })),
+  ...drinkCategories.map((c) => ({ id: `cat-${c.slug}`, label: c.name })),
+]
 ---
 
 <Base restaurant={restaurant}>
   {hasMenu ? (
     <>
-      <nav class="catnav" aria-label="Menu sections">
-        <ul>
-          {featured.length > 0 && <li><a href="#specials">⭐ Specials</a></li>}
-          {[...foodCategories, ...drinkCategories].map((c) => (
-            <li><a href={`#cat-${c.slug}`}>{c.name}</a></li>
-          ))}
-        </ul>
-      </nav>
+      <CategoryTabs tabs={tabs} />
 
-      {featured.length > 0 && (
-        <section id="specials" class="section section--specials">
-          <h2 class="section-title">⭐ Today's Specials</h2>
-          <div class="items">
-            {featured.map((item) => (
-              <MenuItemCard item={item} currency={currency} featured={true} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {foodCategories.map((c) => (
-        <section id={`cat-${c.slug}`} class="section">
-          <h2 class="section-title">{c.name}</h2>
-          {c.description && <p class="section-desc">{c.description}</p>}
-          <div class="items">
-            {itemsIn(c.slug).map((item) => (
-              <MenuItemCard item={item} currency={currency} />
-            ))}
-          </div>
-        </section>
-      ))}
-
-      {drinkCategories.length > 0 && (
-        <>
-          <p class="divider">Drinks</p>
-          {drinkCategories.map((c) => (
-            <section id={`cat-${c.slug}`} class="section">
-              <h2 class="section-title">{c.name}</h2>
-              {c.description && <p class="section-desc">{c.description}</p>}
-              <div class="items">
-                {itemsIn(c.slug).map((item) => (
-                  <MenuItemCard item={item} currency={currency} />
+      <main class="menu-main">
+        {featured.length > 0 && (
+          <section id="specials" class="section">
+            <SectionHeader title="Today's Specials" icon="star" />
+            <div class="specials">
+              <div class="specials__row" data-carousel>
+                {featured.map((item) => (
+                  <div class="specials__item">
+                    <MenuItemCard item={item} currency={currency} featured />
+                  </div>
                 ))}
               </div>
-            </section>
-          ))}
-        </>
-      )}
+              <div class="specials__fade" aria-hidden="true"></div>
+            </div>
+          </section>
+        )}
+
+        {foodCategories.map((c) => (
+          <section id={`cat-${c.slug}`} class="section">
+            <SectionHeader title={c.name} description={c.description} />
+            <div class="items">
+              {itemsIn(c.slug).map((item) => (
+                <MenuItemCard item={item} currency={currency} expandable />
+              ))}
+            </div>
+          </section>
+        ))}
+
+        {drinkCategories.length > 0 && (
+          <div class="drinks">
+            <p class="drinks__label">Drinks</p>
+            {drinkCategories.map((c) => (
+              <section id={`cat-${c.slug}`} class="section">
+                <SectionHeader title={c.name} description={c.description} />
+                <div class="items">
+                  {itemsIn(c.slug).map((item) => (
+                    <MenuItemCard item={item} currency={currency} expandable />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
+      </main>
     </>
   ) : (
     <div class="empty">
-      <p>Our menu is coming soon. Please check back shortly!</p>
+      <p>Our menu is coming soon. Please check back shortly.</p>
     </div>
   )}
 </Base>
+
+<script>
+  // Progressive enhancement: sticky-tab scroll-spy, tap-to-expand cards,
+  // and mouse drag-to-scroll for the Specials carousel. The menu reads fine
+  // with this script disabled.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const nav = document.querySelector<HTMLElement>('[data-catnav]')
+  const tabs = Array.from(document.querySelectorAll<HTMLAnchorElement>('.catnav__tab'))
+  const sections = tabs
+    .map((t) => document.getElementById(t.dataset.tab || ''))
+    .filter((el): el is HTMLElement => !!el)
+
+  const tabsHeight = () => (nav ? nav.offsetHeight : 58)
+
+  let lastActive: string | null = null
+  function applyActive(id: string | null, scrollTab: boolean) {
+    if (!id || id === lastActive) return
+    lastActive = id
+    for (const t of tabs) {
+      if (t.dataset.tab === id) t.setAttribute('aria-current', 'true')
+      else t.removeAttribute('aria-current')
+    }
+    if (scrollTab) {
+      const active = tabs.find((t) => t.dataset.tab === id)
+      active?.scrollIntoView({ inline: 'center', block: 'nearest' })
+    }
+  }
+
+  // Smooth jump on tab click, clearing the sticky tab bar.
+  for (const tab of tabs) {
+    tab.addEventListener('click', (e) => {
+      const id = tab.dataset.tab || ''
+      const el = document.getElementById(id)
+      if (!el) return
+      e.preventDefault()
+      const y = window.scrollY + el.getBoundingClientRect().top - (tabsHeight() + 8)
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
+      applyActive(id, true)
+    })
+  }
+
+  // Scroll-spy.
+  let raf = 0
+  function onScroll() {
+    cancelAnimationFrame(raf)
+    raf = requestAnimationFrame(() => {
+      const top = window.scrollY + tabsHeight() + 24
+      let current = sections[0]?.id ?? null
+      for (const sec of sections) {
+        if (sec.offsetTop <= top) current = sec.id
+      }
+      applyActive(current, true)
+    })
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+
+  // Tap-to-expand cards (single open at a time).
+  const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-expandable]'))
+  for (const card of cards) {
+    card.addEventListener('click', () => {
+      const open = card.getAttribute('data-expanded') === 'true'
+      for (const c of cards) {
+        c.setAttribute('data-expanded', 'false')
+        c.setAttribute('aria-expanded', 'false')
+      }
+      if (!open) {
+        card.setAttribute('data-expanded', 'true')
+        card.setAttribute('aria-expanded', 'true')
+      }
+    })
+  }
+
+  // Specials carousel: drag-to-scroll with a mouse (touch uses native swipe).
+  const car = document.querySelector<HTMLElement>('[data-carousel]')
+  if (car) {
+    let down = false
+    let startX = 0
+    let startScroll = 0
+    car.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return
+      down = true
+      startX = e.clientX
+      startScroll = car.scrollLeft
+      car.style.cursor = 'grabbing'
+    })
+    car.addEventListener('pointermove', (e) => {
+      if (!down) return
+      car.scrollLeft = startScroll - (e.clientX - startX)
+    })
+    const up = () => {
+      down = false
+      car.style.cursor = 'grab'
+    }
+    car.addEventListener('pointerup', up)
+    car.addEventListener('pointerleave', up)
+    car.addEventListener('pointercancel', up)
+  }
+</script>

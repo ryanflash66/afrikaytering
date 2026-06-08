@@ -1,3 +1,5 @@
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import keystatic from '@keystatic/astro'
@@ -12,4 +14,10 @@ const enableKeystatic =
 
 export default defineConfig({
   integrations: [react(), ...(enableKeystatic ? [keystatic()] : [])],
+  vite: {
+    // This project lives in a synced folder (Dropbox), which can grab a file
+    // handle on Vite's dependency-optimizer cache mid-rename and cause EBUSY
+    // errors during (re)optimization. Keep that cache outside the synced tree.
+    cacheDir: join(tmpdir(), 'afrikaytering-vite'),
+  },
 })

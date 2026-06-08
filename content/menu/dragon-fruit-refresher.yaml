@@ -1,0 +1,9 @@
+name: "Dragon Fruit Refresher"
+category: "mocktails"
+description: "A light, chilled dragon fruit mocktail."
+price: 10
+priceNote: ""
+dietaryTags: []
+featured: false
+available: true
+order: 3

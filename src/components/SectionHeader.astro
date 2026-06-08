@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro'
+
+interface Props {
+  title: string
+  description?: string
+  icon?: string
+}
+const { title, description, icon } = Astro.props
+---
+
+<header class="section-header">
+  <h2 class="section-title">
+    {icon && <Icon name={icon} size={22} />}
+    {title}
+  </h2>
+  <div class="section-rule"></div>
+  {description && <p class="section-desc">{description}</p>}
+</header>

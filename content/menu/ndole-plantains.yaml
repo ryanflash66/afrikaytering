@@ -1,9 +1,0 @@
-name: "Ndolé & Plantains"
-category: "mains"
-price: 17
-description: "Bitterleaf simmered with groundnuts and shrimp, served with fried plantains."
-dietaryTags:
-  - contains-nuts
-featured: false
-available: true
-order: 4

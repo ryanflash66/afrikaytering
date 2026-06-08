@@ -1,0 +1,9 @@
+name: "Scotch Egg"
+category: "starters"
+description: "Hard-boiled eggs wrapped in ground mackerel, coated in breadcrumbs and deep-fried."
+price: 8
+priceNote: "2 for"
+dietaryTags: []
+featured: false
+available: true
+order: 3

@@ -1,9 +1,0 @@
-name: "Jollof Rice"
-category: "mains"
-price: 13
-description: "Smoky party-style rice simmered in a rich pepper-and-tomato sauce."
-dietaryTags:
-  - spicy
-featured: true
-available: true
-order: 1

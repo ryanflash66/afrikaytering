@@ -1,12 +1,21 @@
 ---
+import MenuPhoto from './MenuPhoto.astro'
 import DietaryBadge from './DietaryBadge.astro'
 
+/*
+ * MenuItemCard — the core dish card. Photo (or botanical placeholder), an
+ * elegant serif dish name, a muted description, a gold price, and dietary
+ * tags. `featured` uses the photo-forward Specials layout. `expandable`
+ * renders a tappable button that grows to the photo-forward layout on
+ * expand (driven by the menu script via data-expanded).
+ */
 interface Props {
   item: Record<string, any>
-  currency: string
+  currency?: string
   featured?: boolean
+  expandable?: boolean
 }
-const { item, currency, featured = false } = Astro.props
+const { item, currency = 'USD', featured = false, expandable = false } = Astro.props
 
 const price = typeof item.price === 'number' ? item.price : Number(item.price ?? 0)
 const priceFmt = new Intl.NumberFormat('en-US', {
@@ -15,41 +24,38 @@ const priceFmt = new Intl.NumberFormat('en-US', {
 }).format(price)
 
 const tags: string[] = Array.isArray(item.dietaryTags) ? item.dietaryTags : []
+const priceNote = typeof item.priceNote === 'string' ? item.priceNote.trim() : ''
+// Items priced at 0 (e.g. sides that come with a main) show no price.
+const showPrice = price > 0
 const unavailable = item.available === false
-const classes = [
-  'item',
-  featured ? 'item--featured' : '',
-  unavailable ? 'item--unavailable' : '',
-].filter(Boolean).join(' ')
+
+const Tag = expandable ? 'button' : 'article'
+const extra = expandable
+  ? { type: 'button', 'data-expandable': '', 'data-expanded': 'false', 'aria-expanded': 'false' }
+  : {}
 ---
 
-<article class={classes} id={`item-${item.slug}`}>
-  {item.image ? (
-    <img
-      class="item-photo"
-      src={item.image}
-      alt={item.imageAlt || item.name}
-      loading="lazy"
-      decoding="async"
-      width="86"
-      height="86"
-    />
-  ) : (
-    <div class="item-photo item-photo--placeholder" aria-hidden="true">🍽️</div>
-  )}
-
-  <div class="item-body">
-    <div class="item-head">
-      <h3 class="item-name">{item.name}</h3>
-      <span class="item-price">{priceFmt}</span>
+<Tag
+  class:list={['item', { 'item--featured': featured, 'item--unavailable': unavailable }]}
+  id={`item-${item.slug}`}
+  {...extra}
+>
+  <MenuPhoto src={item.image} alt={item.imageAlt || item.name} />
+  <div class="item__body">
+    <div class="item__head">
+      <h3 class="item__name">
+        {item.name}{unavailable && <span class="badge badge--unavailable">Unavailable</span>}
+      </h3>
+      {showPrice && (
+        <span class="item__price">{priceNote && <span class="item__pricenote">{priceNote} </span>}{priceFmt}</span>
+      )}
     </div>
-    {item.description && <p class="item-desc">{item.description}</p>}
+    {item.description && <p class="item__desc">{item.description}</p>}
     {tags.length > 0 && (
-      <ul class="badges">
-        {tags.map((t) => (
-          <li><DietaryBadge tag={t} /></li>
-        ))}
-      </ul>
+      <div class="item__badges">
+        {tags.map((t) => <DietaryBadge tag={t} size="sm" />)}
+      </div>
     )}
   </div>
-</article>
+  {expandable && <span class="item__chev" aria-hidden="true"><i></i></span>}
+</Tag>

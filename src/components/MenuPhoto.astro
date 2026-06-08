@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro'
+
+/*
+ * MenuPhoto — a dish photo, or a clean botanical placeholder (gold flower-2
+ * glyph on an ivory tint) when no image exists yet. The card class controls
+ * the frame size (square thumb when collapsed, 4:3 banner when featured /
+ * expanded), so this component only renders the image vs. placeholder.
+ */
+interface Props {
+  src?: string | null
+  alt?: string
+}
+const { src, alt = '' } = Astro.props
+---
+
+{src ? (
+  <div class="item__photo">
+    <img src={src} alt={alt} loading="lazy" decoding="async" />
+  </div>
+) : (
+  <div class="item__photo item__photo--ph" aria-hidden="true">
+    <Icon name="flower-2" class="photo-glyph" strokeWidth={1.5} />
+  </div>
+)}

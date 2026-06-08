@@ -1,9 +1,0 @@
-name: "Egusi Soup & Fufu"
-category: "mains"
-price: 16
-description: "Melon-seed stew with leafy greens and tender beef, served with soft fufu."
-dietaryTags:
-  - spicy
-featured: false
-available: true
-order: 2

@@ -1,7 +1,0 @@
-name: "Soft Drink"
-category: "drinks"
-price: 2.5
-description: "Coke, Fanta or Sprite, served chilled."
-featured: false
-available: true
-order: 5

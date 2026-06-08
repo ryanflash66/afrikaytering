@@ -1,21 +1,26 @@
 ---
+import Icon from './Icon.astro'
+
 interface Props {
   tag: string
+  size?: 'sm' | 'md'
 }
-const { tag } = Astro.props
+const { tag, size = 'md' } = Astro.props
 
-const MAP: Record<string, { label: string; icon: string }> = {
-  vegetarian: { label: 'Vegetarian', icon: '🥬' },
-  vegan: { label: 'Vegan', icon: '🌱' },
-  halal: { label: 'Halal', icon: '☪️' },
-  'gluten-free': { label: 'Gluten-free', icon: '🌾' },
-  'dairy-free': { label: 'Dairy-free', icon: '🥛' },
-  'contains-nuts': { label: 'Contains nuts', icon: '🥜' },
-  spicy: { label: 'Spicy', icon: '🌶️' },
+const TAGS: Record<string, { label: string; icon: string; palette: string }> = {
+  vegetarian: { label: 'Vegetarian', icon: 'leaf', palette: 'green' },
+  vegan: { label: 'Vegan', icon: 'sprout', palette: 'green' },
+  halal: { label: 'Halal', icon: 'moon-star', palette: 'blue' },
+  'gluten-free': { label: 'Gluten-free', icon: 'wheat-off', palette: 'mauve' },
+  'dairy-free': { label: 'Dairy-free', icon: 'milk-off', palette: 'mauve' },
+  'contains-nuts': { label: 'Contains nuts', icon: 'bean', palette: 'gold' },
+  spicy: { label: 'Spicy', icon: 'flame', palette: 'clay' },
 }
-const info = MAP[tag] ?? { label: tag, icon: '•' }
+
+const info = TAGS[tag] ?? { label: tag, icon: 'leaf', palette: 'green' }
+const sm = size === 'sm'
 ---
 
-<span class={`badge badge--${tag}`}>
-  <span aria-hidden="true">{info.icon}</span> {info.label}
+<span class:list={['diet', `diet--${info.palette}`, { 'diet--sm': sm }]}>
+  <Icon name={info.icon} size={sm ? 12 : 13} />{info.label}
 </span>
