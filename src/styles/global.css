@@ -212,6 +212,8 @@ a { color: inherit; }
   max-width: var(--maxw);
   padding: 11px 16px;
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -465,6 +467,8 @@ button.item:active { transform: scale(0.992); }
   display: flex;
   gap: 14px;
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   padding: 2px 16px 10px;
   scrollbar-width: none;
