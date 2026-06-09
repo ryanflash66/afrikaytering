@@ -3,6 +3,8 @@ category: "mains"
 description: "Tender pork ribs marinated and grilled to perfection. Includes 2 sides."
 price: 15
 priceNote: ""
+image: "/images/menu/ribs.jpg"
+imageAlt: "Ribs"
 dietaryTags: []
 featured: false
 available: true

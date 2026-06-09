@@ -3,6 +3,8 @@ category: "starters"
 description: "Flaky pastry filled with seasoned ground meat and mixed veggies."
 price: 5
 priceNote: "2 for"
+image: "/images/menu/meat-pie.jpg"
+imageAlt: "Meat Pie"
 dietaryTags: []
 featured: false
 available: true

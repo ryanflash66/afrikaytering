@@ -3,6 +3,8 @@ category: "starters"
 description: "Pork chunks with fried plantain, marinated with green spices."
 price: 15
 priceNote: ""
+image: "/images/menu/pork-bites.jpg"
+imageAlt: "Pork Bites"
 dietaryTags: []
 featured: false
 available: true

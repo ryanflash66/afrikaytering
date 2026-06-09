@@ -3,6 +3,8 @@ category: "desserts"
 description: "Smooth, creamy frozen yogurt — kossam, lightly sweet."
 price: 5
 priceNote: ""
+image: "/images/menu/frozen-yogurt-kossam.jpg"
+imageAlt: "Frozen Yogurt (Kossam)"
 dietaryTags: []
 featured: false
 available: true

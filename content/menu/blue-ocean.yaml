@@ -3,6 +3,8 @@ category: "mocktails"
 description: "A vibrant blue mocktail topped with fresh dragon fruit. Contains coconut."
 price: 10
 priceNote: ""
+image: "/images/menu/blue-ocean.jpg"
+imageAlt: "Blue Ocean"
 dietaryTags: []
 featured: false
 available: true

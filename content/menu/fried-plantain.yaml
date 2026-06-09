@@ -3,6 +3,8 @@ category: "sides"
 description: "Sweet ripe plantains, fried golden."
 price: 0
 priceNote: ""
+image: "/images/menu/fried-plantain.jpg"
+imageAlt: "Fried Plantain"
 dietaryTags: []
 featured: false
 available: true

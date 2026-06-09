@@ -3,6 +3,8 @@ category: "sides"
 description: "Tender cabbage, sautéed and lightly seasoned."
 price: 0
 priceNote: ""
+image: "/images/menu/fried-cabbage.jpg"
+imageAlt: "Fried Cabbage"
 dietaryTags: []
 featured: false
 available: true

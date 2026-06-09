@@ -3,6 +3,8 @@ category: "mocktails"
 description: "A light, chilled dragon fruit mocktail."
 price: 10
 priceNote: ""
+image: "/images/menu/dragon-fruit-refresher.jpg"
+imageAlt: "Dragon Fruit Refresher"
 dietaryTags: []
 featured: false
 available: true
