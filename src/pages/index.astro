@@ -107,8 +107,6 @@ const tabs = [
     .map((t) => document.getElementById(t.dataset.tab || ''))
     .filter((el): el is HTMLElement => !!el)
 
-  const tabsHeight = () => (nav ? nav.offsetHeight : 58)
-
   const list = nav?.querySelector<HTMLElement>('.catnav__list')
   let lastActive: string | null = null
 
@@ -131,14 +129,14 @@ const tabs = [
     list.scrollTo({ left: Math.max(0, target), behavior: smooth && !reduce ? 'smooth' : 'auto' })
   }
 
-  // Smooth jump on tab click, clearing the sticky tab bar.
+  // Smooth jump on tab click; align the section near the top of the screen.
   for (const tab of tabs) {
     tab.addEventListener('click', (e) => {
       const id = tab.dataset.tab || ''
       const el = document.getElementById(id)
       if (!el) return
       e.preventDefault()
-      const y = window.scrollY + el.getBoundingClientRect().top - (tabsHeight() + 8)
+      const y = window.scrollY + el.getBoundingClientRect().top - 12
       window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
       setActive(id)
       centerActiveTab(true)
@@ -153,7 +151,7 @@ const tabs = [
   function onScroll() {
     cancelAnimationFrame(raf)
     raf = requestAnimationFrame(() => {
-      const top = window.scrollY + tabsHeight() + 24
+      const top = window.scrollY + 100
       let current = sections[0]?.id ?? null
       for (const sec of sections) {
         if (sec.offsetTop <= top) current = sec.id
