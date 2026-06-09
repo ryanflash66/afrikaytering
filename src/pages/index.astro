@@ -109,18 +109,26 @@ const tabs = [
 
   const tabsHeight = () => (nav ? nav.offsetHeight : 58)
 
+  const list = nav?.querySelector<HTMLElement>('.catnav__list')
   let lastActive: string | null = null
-  function applyActive(id: string | null, scrollTab: boolean) {
+
+  function setActive(id: string | null) {
     if (!id || id === lastActive) return
     lastActive = id
     for (const t of tabs) {
       if (t.dataset.tab === id) t.setAttribute('aria-current', 'true')
       else t.removeAttribute('aria-current')
     }
-    if (scrollTab) {
-      const active = tabs.find((t) => t.dataset.tab === id)
-      active?.scrollIntoView({ inline: 'center', block: 'nearest' })
-    }
+  }
+
+  // Center the active tab WITHIN the horizontal bar only — never scrolls the
+  // document. Only called when the page is idle, so it can't fight a fling.
+  function centerActiveTab(smooth: boolean) {
+    if (!list || !lastActive) return
+    const t = tabs.find((tab) => tab.dataset.tab === lastActive)
+    if (!t) return
+    const target = t.offsetLeft - (list.clientWidth - t.offsetWidth) / 2
+    list.scrollTo({ left: Math.max(0, target), behavior: smooth && !reduce ? 'smooth' : 'auto' })
   }
 
   // Smooth jump on tab click, clearing the sticky tab bar.
@@ -132,12 +140,16 @@ const tabs = [
       e.preventDefault()
       const y = window.scrollY + el.getBoundingClientRect().top - (tabsHeight() + 8)
       window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
-      applyActive(id, true)
+      setActive(id)
+      centerActiveTab(true)
     })
   }
 
-  // Scroll-spy.
+  // Scroll-spy: update only the active highlight during scrolling. Do NOT
+  // scroll anything mid-gesture — a programmatic scroll cancels touch
+  // momentum and makes the page feel stuck. Re-center once scrolling settles.
   let raf = 0
+  let settle = 0
   function onScroll() {
     cancelAnimationFrame(raf)
     raf = requestAnimationFrame(() => {
@@ -146,8 +158,10 @@ const tabs = [
       for (const sec of sections) {
         if (sec.offsetTop <= top) current = sec.id
       }
-      applyActive(current, true)
+      setActive(current)
     })
+    clearTimeout(settle)
+    settle = window.setTimeout(() => centerActiveTab(true), 150)
   }
   window.addEventListener('scroll', onScroll, { passive: true })
   onScroll()
